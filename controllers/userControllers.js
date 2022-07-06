@@ -14,7 +14,6 @@ const createUser = async (req, res) => {
 
 const getAllUsers = async (req, res) => {
     try {
-        console.log("IN REQ", req.user);
         const users = await User.findAll({
             // include: [{
             //     model: Project
