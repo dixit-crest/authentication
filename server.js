@@ -8,11 +8,13 @@ const app = express();
 const passportJWT = require("passport-jwt");
 const { getUser } = require('./controllers/userControllers');
 const CONSTANTS = require('./config/constants');
+const notesRoutes = require('./routes/notesRoutes');
 
 
 app.use(express.json())
 
 app.use('/api/users', userRoutes);
+app.use('/api/notes', notesRoutes);
 app.use('/api/auth', authRoutes);
 
 const jwtOptions = {}
@@ -24,7 +26,7 @@ jwtOptions.secretOrKey = CONSTANTS.PASSWORD_HASH;
 let steategy = new passportJWT.Strategy(
     jwtOptions,
     async (jwtPayload, next) => {
-        console.log("Payload recived ", jwtPayload);
+        // console.log("Payload recived ", jwtPayload);
         let user = await getUser(jwtPayload.id)
 
         if (user) {

@@ -6,7 +6,7 @@ const createUser = async (req, res) => {
             user,
         });
     } catch (error) {
-        console.log({ ...error });
+        console.log(" :: ERR :: ", { ...error });
         return res.status(500).json({ error: error.message })
     }
 }
@@ -22,6 +22,24 @@ const getAllUsers = async (req, res) => {
 
         return res.json({ users })
     } catch (error) {
+        console.log(" :: ERR :: ", { ...error });
+        return res.status(500).send(error.message);
+    }
+}
+const getUserById = async (req, res) => {
+    try {
+        const user = await User.findOne({ where: { id: req.params.id }})
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' })
+        }
+        // const notes = await user.getNotes()
+        return res.json({ 
+            user,
+            // notes 
+        })
+    } catch (error) {
+        console.log(" :: ERR :: ", { ...error });
         return res.status(500).send(error.message);
     }
 }
@@ -34,9 +52,9 @@ const getUser = async (id) => {
             }
         })
 
-        return users.dataValues 
+        return users.dataValues
     } catch (error) {
-        return res.status(500).send(error.message);
+        return error;
     }
 }
 
@@ -98,6 +116,7 @@ module.exports = {
     editUser,
     deleteUser,
     getUser,
+    getUserById,
     // ---------
     allAccess, userBoard, adminBoard, moderatorBoard
 }

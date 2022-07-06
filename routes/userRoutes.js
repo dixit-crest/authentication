@@ -8,6 +8,8 @@ userRouter.post('/', passport.authenticate('jwt', {session: false}), userControl
 
 userRouter.get('/', passport.authenticate('jwt', {session: false}), userControllers.getAllUsers)
 
+userRouter.get('/:id', passport.authenticate('jwt', {session: false}), userControllers.getUserById)
+
 userRouter.put('/:id', passport.authenticate('jwt', {session: false}), userControllers.editUser)
 
 userRouter.delete('/:id', passport.authenticate('jwt', {session: false}), userControllers.deleteUser)
