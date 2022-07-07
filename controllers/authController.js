@@ -5,8 +5,6 @@ const { User } = require('../models');
 
 const signup = async (req, res) => {
 
-
-
     try {
         const { email, password } = req.body;
         if (!(email && password)) {
@@ -54,7 +52,7 @@ const signin = async (req, res) => {
             let isPasswordValid = bcryptjs.compare(email, user.dataValues.password)
             if (!isPasswordValid) return res.json({ message: "Wrong credentials.", token: null })
 
-            let token = await jwt.sign({ id: user.dataValues.id, email: user.dataValues.email }, CONSTANTS.PASSWORD_HASH, {
+            let token = jwt.sign({ id: user.dataValues.id, email: user.dataValues.email }, CONSTANTS.PASSWORD_HASH, {
                 expiresIn: "7days"
             })
             const newObj = { ...user, token }
@@ -74,5 +72,5 @@ const signin = async (req, res) => {
 
 module.exports = {
     signin,
-    signup,
+    signup
 }

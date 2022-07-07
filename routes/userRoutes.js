@@ -1,14 +1,16 @@
 const { Router } = require('express');
+const passport = require('passport');
 const userControllers = require('../controllers/userControllers');
-const { verifyToken } = require('../middlewares/auth');
 const userRouter = Router();
 
-userRouter.post('/', [verifyToken], userControllers.createUser)
+userRouter.post('/', passport.authenticate('jwt', { session: false }), userControllers.createUser)
 
-userRouter.get('/', [verifyToken], userControllers.getAllUsers)
+userRouter.get('/', passport.authenticate('jwt', { session: false }), userControllers.getAllUsers)
 
-userRouter.put('/:id', [verifyToken], userControllers.editUser)
+userRouter.get('/:id', passport.authenticate('jwt', { session: false }), userControllers.getUserById)
 
-userRouter.delete('/:id', [verifyToken], userControllers.deleteUser)
+userRouter.put('/:id', passport.authenticate('jwt', { session: false }), userControllers.editUser)
+
+userRouter.delete('/:id', passport.authenticate('jwt', { session: false }), userControllers.deleteUser)
 
 module.exports = userRouter
