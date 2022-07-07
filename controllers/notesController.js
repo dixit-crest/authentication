@@ -14,14 +14,22 @@ const createNote = async (req, res) => {
     }
 }
 
-
-
 const getAllNotes = async (req, res) => {
+
+    const filter = {
+        limit: 10,
+        offset: 0,
+        page: 1,
+        ...req.body.filter || {},
+    }
     try {
-        const user = await User.findAll({ include: ['notes'] })
+        const {count, rows: notes} = await Note.findAndCountAll({
+            include: { model: User, as: 'user', attributes:  ['id', 'firstName', 'lastName', 'email' ]},
+            ...filter
+        })
         // const user = await User.getNote()
-        console.log(" :: info :: ", [...user]);
-        res.json({ user });
+        console.log(" :: info :: ", JSON.parse(JSON.stringify(notes)));
+        res.json({ notes, totalNotes: count });
     } catch (error) {
         console.log(" :: error :: ", error);
         res.status(500).json({ message: error.message })

@@ -12,11 +12,27 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       // models.User.hasMany(models.Note, { as: 'notes' });
-      models.Note.belongsTo(models.User, { foreignKey: "ownerId", as: 'notes' });
+      models.Note.belongsTo(models.User, { foreignKey: "ownerId", as: 'user' });
     }
   }
   Note.init({
-    title: DataTypes.STRING,
+    title: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "Title must not be empty string",
+        }
+      },
+      get: function () {
+        const rawValue = this.getDataValue('title');
+        if (rawValue) {
+          return rawValue[0]?.toUpperCase() + rawValue.slice(1);
+        } else {
+          return ""
+        }
+      },
+    },
     description: DataTypes.STRING,
     ownerId: DataTypes.INTEGER,
     status: DataTypes.STRING
