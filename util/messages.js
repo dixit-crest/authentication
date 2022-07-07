@@ -14,6 +14,9 @@ const messages = {
     },
     SERVER_ERRPR: {
         messages: "Server error occurred"
+    },
+    ACTION_NOT_PERMITTED: {
+        messages: "You do not have permission to perform this action."
     }
 }
 

@@ -1,4 +1,4 @@
-const { User, Project } = require('../models');
+const { User } = require('../models');
 const createUser = async (req, res) => {
     try {
         const user = await User.create(req.body);
