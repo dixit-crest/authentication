@@ -24,6 +24,8 @@ module.exports = (sequelize, DataTypes) => {
     email: DataTypes.STRING,
     password: DataTypes.STRING,
     token: DataTypes.STRING,
+    confirmEmailToken: DataTypes.STRING,
+    resetPasswordToken: DataTypes.STRING,
     role: {
       type: DataTypes.STRING(12),
       defaultValue: `${CONSTANTS.ROLES.USER}`

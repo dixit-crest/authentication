@@ -11,7 +11,7 @@ const CONSTANTS = require('./config/constants');
 const notesRoutes = require('./routes/notesRoutes');
 const projectRoutes = require('./routes/projectRoutes');
 const shopsRoutes = require('./routes/shopRoutes');
-
+require('dotenv').config();
 
 app.use(express.json())
 
