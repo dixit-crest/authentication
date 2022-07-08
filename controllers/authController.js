@@ -1,4 +1,5 @@
 const bcryptjs = require('bcryptjs');
+const { request } = require('express');
 const jwt = require('jsonwebtoken');
 const CONSTANTS = require('../config/constants');
 const { User } = require('../models');
@@ -21,7 +22,7 @@ const signup = async (req, res) => {
         userObj.password = bcryptjs.hashSync(password, 8)
         userObj.token = ""
         const createdUser = await User.create(userObj)
-
+        res.user = createdUser
         res.json({ user: createdUser })
     } catch (error) {
         console.log({ ...error });

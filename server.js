@@ -10,12 +10,14 @@ const { getUser } = require('./controllers/userControllers');
 const CONSTANTS = require('./config/constants');
 const notesRoutes = require('./routes/notesRoutes');
 const projectRoutes = require('./routes/projectRoutes');
+const shopsRoutes = require('./routes/shopRoutes');
 
 
 app.use(express.json())
 
 app.use('/api/users', userRoutes);
 app.use('/api/notes', notesRoutes);
+app.use('/api/shops', shopsRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/auth', authRoutes);
 

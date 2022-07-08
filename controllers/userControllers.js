@@ -1,4 +1,4 @@
-const { User } = require('../models');
+const { User, Note, Project, Shop } = require('../models');
 const createUser = async (req, res) => {
     try {
         const user = await User.create(req.body);
@@ -15,9 +15,24 @@ const createUser = async (req, res) => {
 const getAllUsers = async (req, res) => {
     try {
         const users = await User.findAll({
-            // include: [{
-            //     model: Project
-            // }]
+            attributes: {exclude: ['token', 'role']},
+            include: [
+                {
+                    model: Note,
+                    as: 'notes',
+                    attributes: { exclude: ['ownerId'] }
+                },
+                {
+                    model: Project,
+                    as: 'Projects'
+                },
+                {
+                    model: Shop,
+                    as: 'shop',
+                    attributes: { exclude: ['shopOwnerId'] }
+
+                },
+            ]
         })
 
         return res.json({ users })
@@ -28,13 +43,13 @@ const getAllUsers = async (req, res) => {
 }
 const getUserById = async (req, res) => {
     try {
-        const user = await User.findOne({ where: { id: req.params.id }})
+        const user = await User.findOne({ where: { id: req.params.id } })
 
         if (!user) {
             return res.status(404).json({ message: 'User not found' })
         }
         // const notes = await user.getNotes()
-        return res.json({ 
+        return res.json({
             user,
             // notes 
         })
@@ -95,21 +110,55 @@ const deleteUser = async (req, res) => {
 }
 
 
+// ======================================
+const getUsersShop = async (req, res) => {
+    try {
+        const user = await User.findOne({ where: { id: req.params.id } })
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' })
+        }
+        const shop = await user.getShop();
+        return res.json({
+            shop,
+        })
+    } catch (error) {
+        console.log(" :: ERR :: ", { ...error });
+        return res.status(500).send(error.message);
+    }
+}
 
+const getUsersNotes = async (req, res) => {
+    try {
+        const user = await User.findOne({ where: { id: req.params.id } })
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' })
+        }
+        const notes = await user.getNotes();
+        return res.json({
+            notes,
+        })
+    } catch (error) {
+        console.log(" :: ERR :: ", { ...error });
+        return res.status(500).send(error.message);
+    }
+}
 
-// ----------------
-const allAccess = (req, res) => {
-    res.status(200).send("Public Content.");
-};
-const userBoard = (req, res) => {
-    res.status(200).send("User Content.");
-};
-const adminBoard = (req, res) => {
-    res.status(200).send("Admin Content.");
-};
-const moderatorBoard = (req, res) => {
-    res.status(200).send("Moderator Content.");
-};
+const getUsersProjects = async (req, res) => {
+    try {
+        const user = await User.findOne({ where: { id: req.params.id } })
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' })
+        }
+        const projects = await user.getProjects();
+        return res.json({
+            projects,
+        })
+    } catch (error) {
+        console.log(" :: ERR :: ", { ...error });
+        return res.status(500).send(error.message);
+    }
+}
+
 module.exports = {
     createUser,
     getAllUsers,
@@ -117,6 +166,8 @@ module.exports = {
     deleteUser,
     getUser,
     getUserById,
-    // ---------
-    allAccess, userBoard, adminBoard, moderatorBoard
+    //  ------------
+    getUsersShop,
+    getUsersNotes,
+    getUsersProjects,
 }
