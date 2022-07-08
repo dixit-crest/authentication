@@ -1,37 +1,36 @@
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { Op, QueryTypes } = require('sequelize');
 const CONSTANTS = require('../config/constants');
-const { User, Project, Note, sequelize } = require('../models');
-const { getFilter } = require('../util');
+const { User, Project, Shop } = require('../models');
 const { messages } = require('../util/messages');
 
-const createNote = async (req, res) => {
+const createShop = async (req, res) => {
     try {
-        const note = await Note.create({ ...req.body, ownerId: req.user.id })
-        console.log(note.dataValues);
-        res.json({ note })
+        const shop = await Shop.create({ ...req.body, shopOwnerId: req.user.id })
+        console.log(shop.dataValues);
+        res.json({ shop })
     } catch (error) {
         res.status(500).json({ message: error.message })
     }
 }
 
-const getAllNotes = async (req, res) => {
+const getAllShops = async (req, res) => {
 
-    const filters = getFilter(req.body.filter || {})
-
+    const filter = {
+        limit: 10,
+        offset: 0,
+        page: 1,
+        ...req.body.filter || {},
+    }
     try {
-        // const notes = await sequelize.query('SELECT * FROM notes ORDER BY notes.createdAt DESC', {
-        //     type: QueryTypes.SELECT
-        // })
-        // const count = 0
-        const { count, rows: notes } = await Note.findAndCountAll({
-            include: { model: User, as: 'user', attributes: ['id', 'firstName', 'lastName', 'email'] },
-            ...filters
+        const { count, rows: shops } = await Shop.findAndCountAll({
+            attributes: { exclude: ['shopOwnerId'] },
+            include: { model: User, as: 'shopOwner', attributes: ['id', 'firstName', 'lastName', 'email'] },
+            ...filter
         })
         // const user = await User.getNote()
-        console.log(" :: info :: ", JSON.stringify(notes, null, 2));
-        res.json({ notes, resultsRetrived: count });
+        console.log(" :: info :: ", JSON.parse(JSON.stringify(shops)));
+        res.json({ shops, totalNotes: count });
     } catch (error) {
         console.log(" :: error :: ", error);
         res.status(500).json({ message: error.message })
@@ -41,9 +40,9 @@ const getAllNotes = async (req, res) => {
 
 const getSingleNote = async (req, res) => {
     try {
-        const note = await Note.findOne({ where: { id: req.params.id }, include: User });
-        console.log(" :: INFO :: ", Note.dataValues);
-        res.json({ note: note.dataValues, ...messages.DATA_RETRIEVED });
+        const shop = await Shop.findOne({ where: { id: req.params.id }, include: User });
+        console.log(" :: INFO :: ", Shop.dataValues);
+        res.json({ shop: shop.dataValues, ...messages.DATA_RETRIEVED });
     } catch (error) {
         console.log(" :: error :: ", error);
         res.status(500).json({ message: error.message })
@@ -62,7 +61,7 @@ const getUsersAndNoes = async (req, res) => {
 
 const editNote = async (req, res) => {
     try {
-        const updatedNote = await Note.update(req.body, {
+        const updatedNote = await Shop.update(req.body, {
             where: {
                 id: req.params.id
             }
@@ -78,15 +77,15 @@ const editNote = async (req, res) => {
     }
 }
 
-const deleteNote = async (req, res) => {
+const deleteShop = async (req, res) => {
     try {
-        const deletedNote = await Note.destroy({
+        const deletedShop = await Shop.destroy({
             where: {
                 id: req.params.id
             }
         })
-        console.log(" :: INFO :: ", deletedNote);
-        if (deletedNote === 0) {
+        console.log(" :: INFO :: ", deletedShop);
+        if (deletedShop === 0) {
             return res.status(400).json({ message: "No records were affected." })
         }
         res.json({ message: "Record deleted successfully." })
@@ -97,10 +96,10 @@ const deleteNote = async (req, res) => {
 }
 
 module.exports = {
-    createNote,
-    getAllNotes,
+    createShop,
+    getAllShops,
     getSingleNote,
     editNote,
-    deleteNote,
+    deleteShop,
     getUsersAndNoes
 }

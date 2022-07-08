@@ -18,7 +18,7 @@ const verifyToken = async (req, res, next) => {
     }
 }
 
-const checkPermission = (ROLE) => (req, res, next) => {
+const checkPermission = (ROLE = 0) => (req, res, next) => {
     if(Number(req.user.role) === ROLE) {
         next();
     } else {

@@ -20,6 +20,16 @@ const messages = {
     }
 }
 
+
+const EMAIL = {
+    RESET_PASSWORD : {
+        SUBJECT: "Reset Password | Please click here to reset your password",
+    },
+    CONFIRM_EMAIL : {
+        SUBJECT: "Confirm Email | Please click here to confirm your email",
+    },
+}
 module.exports = {
-    messages
+    messages,
+    EMAIL
 }
