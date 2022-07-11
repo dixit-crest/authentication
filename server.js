@@ -4,6 +4,7 @@ const authRoutes = require('./routes/authRoutes');
 const passport = require('passport');
 const PORT = process.env.PORT || 3001;
 const app = express();
+const cors = require('cors');
 
 const passportJWT = require("passport-jwt");
 const { getUser } = require('./controllers/userControllers');
@@ -13,6 +14,9 @@ const projectRoutes = require('./routes/projectRoutes');
 const shopsRoutes = require('./routes/shopRoutes');
 require('dotenv').config();
 
+app.use(cors({
+    origin: 'http://localhost:3000'
+}))
 app.use(express.json())
 
 app.use('/api/users', userRoutes);

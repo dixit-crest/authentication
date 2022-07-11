@@ -1,31 +1,33 @@
 const messages = {
     DATA_RETRIEVED: {
-        messages: "Data retrieved successfully"
-    }
-    ,
+        message: "Data retrieved successfully"
+    },
     DATA_UPDATED: {
-        messages: "Data updated successfully"
+        message: "Data updated successfully"
     },
     DATA_DELETED: {
-        messages: "Data deleted successfully"
+        message: "Data deleted successfully"
     },
     RECORD_CREATED: {
-        messages: "Record created successfully"
+        message: "Record created successfully"
     },
-    SERVER_ERRPR: {
-        messages: "Server error occurred"
+    SERVER_ERROR: {
+        message: "Server error occurred"
     },
     ACTION_NOT_PERMITTED: {
-        messages: "You do not have permission to perform this action."
-    }
+        message: "You do not have permission to perform this action."
+    },
+    ACCOUNT_CREATED: {
+        message: "Account created successfully, Please check your email for verification instructions."
+    },
 }
 
 
 const EMAIL = {
-    RESET_PASSWORD : {
+    RESET_PASSWORD: {
         SUBJECT: "Reset Password | Please click here to reset your password",
     },
-    CONFIRM_EMAIL : {
+    CONFIRM_EMAIL: {
         SUBJECT: "Confirm Email | Please click here to confirm your email",
     },
 }
