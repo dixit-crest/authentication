@@ -1,14 +1,14 @@
 const nodemailer = require('nodemailer');
-const { getRegistrationMail } = require('./templates');
+const CONSTANTS = require('../config/constants');
 require('dotenv').config()  
 
 const transporter = nodemailer.createTransport({
-    service: "outlook",
-    host: 'smtp-mail.outlook.com',
+    port: CONSTANTS.EMAIL.PORT,
+    host: CONSTANTS.EMAIL.HOST,
 
     auth: {
-        user: process.env.MAIL_USER,
-        pass: process.env.MAIL_PASSWORD
+        user: CONSTANTS.EMAIL.USER,
+        pass: CONSTANTS.EMAIL.PASS
     }
 })
 

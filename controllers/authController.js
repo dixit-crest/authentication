@@ -6,6 +6,8 @@ const sendMail = require('../emails');
 const { getRegistrationMail, resetPasswordEmail } = require('../emails/templates');
 const { User } = require('../models');
 const { messages, EMAIL } = require('../util/messages');
+const emailChacker =require('deep-email-validator')
+
 require('dotenv').config()
 
 const signup = async (req, res) => {
@@ -14,6 +16,13 @@ const signup = async (req, res) => {
         const { email, password } = req.body;
         if (!(email && password)) {
             return res.status(400).json({ message: "Please provide email and password" })
+        }
+
+        const validatinEmail = await emailChacker.validate(email)
+
+        // is valid email
+        if(!validatinEmail.valid) {
+            return res.status(400).json({ message: "Please check your email and try again." })
         }
 
         // if user already exists 
