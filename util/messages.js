@@ -7,7 +7,7 @@ const messages = {
         messages: "Data updated successfully"
     },
     DATA_DELETED: {
-        messages: "Data deleted successfully"
+        messages: "Data deleted successfully."
     },
     RECORD_CREATED: {
         messages: "Record created successfully"
